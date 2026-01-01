@@ -1,0 +1,15 @@
+# Python / Django
+__pycache__/
+*.pyc
+*.pyo
+.env
+backend/venv/
+backend/*.sqlite3
+
+
+# Node
+frontend/node_modules/
+
+# Docker
+docker-compose.override.yml
+.env.local

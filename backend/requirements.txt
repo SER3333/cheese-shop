@@ -1,0 +1,11 @@
+Django>=4.2,<5
+djangorestframework
+psycopg2-binary
+dj-database-url
+python-dotenv
+requests
+Pillow
+django-cors-headers
+python-telegram-bot
+gunicorn
+whitenoise
