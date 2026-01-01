@@ -9,10 +9,10 @@ RUN apt-get update \
     && apt-get install -y build-essential libpq-dev gcc --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
+COPY backend/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app/
+COPY backend/ .
 
 RUN mkdir -p /app/media
 
