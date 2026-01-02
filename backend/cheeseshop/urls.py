@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from products.sitemaps import ProductSitemap, StaticViewSitemap
 from .views import robots_txt
-from .views import ReactAppView
+
 
 
 sitemaps = {
@@ -27,7 +27,3 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-urlpatterns += [
-    path("", ReactAppView.as_view(), name="react"),
-    path("<path:path>", ReactAppView.as_view(), name="react-catchall"),
-]
