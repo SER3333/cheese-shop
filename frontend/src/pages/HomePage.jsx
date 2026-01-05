@@ -72,6 +72,7 @@ const HomePage = () => {
   const [visibleCount, setVisibleCount] = useState(6);
 
   useEffect(() => {
+    console.log("API:", process.env.REACT_APP_API_URL);
     fetch(`${process.env.REACT_APP_API_URL}/api/products/`)
       .then((res) => res.json())
       .then(setProducts)

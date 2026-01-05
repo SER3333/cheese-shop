@@ -90,7 +90,7 @@ const AboutPage = () => {
           </p>
         </section>
 
-        {/* Image */}
+        {/* Image
         <section className="mb-12 sm:mb-16 flex justify-center">
           <img
             src="/images/about-farm.png"
@@ -105,7 +105,7 @@ const AboutPage = () => {
             "
             loading="lazy"
           />
-        </section>
+        </section>*/}
 
         {/* Values */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 sm:mb-16">
