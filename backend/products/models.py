@@ -1,5 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
 
 class Product(models.Model):
     CATEGORY_CHOICES = [
@@ -27,6 +30,7 @@ class Product(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default="cheese")
 
     def save(self, *args, **kwargs):
+        # ===== SLUG =====
         if not self.slug:
             base_slug = slugify(self.name)
             slug = base_slug
@@ -36,7 +40,33 @@ class Product(models.Model):
                 counter += 1
             self.slug = slug
 
+        # спочатку зберігаємо, щоб був файл
         super().save(*args, **kwargs)
+
+        # ===== IMAGE COMPRESSION =====
+        if self.image:
+            img = Image.open(self.image)
+
+            # конвертація в RGB (важливо для PNG)
+            if img.mode in ("RGBA", "P"):
+                img = img.convert("RGB")
+
+            max_size = (1600, 1600)
+            img.thumbnail(max_size, Image.LANCZOS)
+
+            buffer = BytesIO()
+            img.save(buffer, format="JPEG", quality=75, optimize=True)
+
+            file_name = self.image.name.split("/")[-1]
+            self.image.save(
+                file_name,
+                ContentFile(buffer.getvalue()),
+                save=False
+            )
+
+            buffer.close()
+
+            super().save(update_fields=["image"])
 
     def __str__(self):
         return f"{self.name} — {self.weight} г"
