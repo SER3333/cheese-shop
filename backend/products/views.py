@@ -11,8 +11,8 @@ class ProductListView(generics.ListAPIView):
     queryset = (
         Product.objects
         .filter(available=True)
-        .only("id", "name", "slug", "price", "weight", "image")
-        .order_by("-created_at")
+        .only("id", "name", "slug", "price", "weight", "image", "created_at")
+
     )
 
     def get_serializer_context(self):

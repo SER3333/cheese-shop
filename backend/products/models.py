@@ -30,7 +30,12 @@ class Product(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default="cheese")
 
     def save(self, *args, **kwargs):
-        # ===== SLUG =====
+        is_new = self.pk is None
+        old_image = None
+
+        if not is_new:
+            old_image = Product.objects.get(pk=self.pk).image
+
         if not self.slug:
             base_slug = slugify(self.name)
             slug = base_slug
@@ -40,30 +45,24 @@ class Product(models.Model):
                 counter += 1
             self.slug = slug
 
-        # спочатку зберігаємо, щоб був файл
         super().save(*args, **kwargs)
 
-        # ===== IMAGE COMPRESSION =====
-        if self.image:
+        if self.image and (is_new or self.image != old_image):
             img = Image.open(self.image)
 
-            # конвертація в RGB (важливо для PNG)
             if img.mode in ("RGBA", "P"):
                 img = img.convert("RGB")
 
-            max_size = (1600, 1600)
-            img.thumbnail(max_size, Image.LANCZOS)
+            img.thumbnail((1600, 1600), Image.LANCZOS)
 
             buffer = BytesIO()
             img.save(buffer, format="JPEG", quality=75, optimize=True)
 
-            file_name = self.image.name.split("/")[-1]
             self.image.save(
-                file_name,
+                self.image.name,
                 ContentFile(buffer.getvalue()),
                 save=False
             )
-
             buffer.close()
 
             super().save(update_fields=["image"])
