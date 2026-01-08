@@ -30,26 +30,16 @@ class Product(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default="cheese")
 
     def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        old_image = None
-
-        if not is_new:
-            old_image = Product.objects.get(pk=self.pk).image
-
-        if not self.slug:
-            base_slug = slugify(self.name)
-            slug = base_slug
-            counter = 1
-            while Product.objects.filter(slug=slug).exclude(pk=self.pk).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            self.slug = slug
+        is_new_image = self.pk is None or (
+            Product.objects.filter(pk=self.pk)
+            .exclude(image=self.image)
+            .exists()
+        )
 
         super().save(*args, **kwargs)
 
-        if self.image and (is_new or self.image != old_image):
+        if self.image and is_new_image:
             img = Image.open(self.image)
-
             if img.mode in ("RGBA", "P"):
                 img = img.convert("RGB")
 
@@ -63,8 +53,8 @@ class Product(models.Model):
                 ContentFile(buffer.getvalue()),
                 save=False
             )
-            buffer.close()
 
+            buffer.close()
             super().save(update_fields=["image"])
 
     def __str__(self):
