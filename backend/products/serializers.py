@@ -6,33 +6,42 @@ class ProductImageSerializer(serializers.ModelSerializer):
         model = ProductImage
         fields = ["image"]
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductListSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
-    images = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
-        fields = [
-            'id',
-            'name',
-            'slug',
-            'short_description',
-            'long_description',
-            'price',
-            'image',
-            'available',
-            'category',
-            'images',
-            'weight',
-        ]
+        fields = (
+            "id",
+            "name",
+            "slug",
+            "price",
+            "weight",
+            "image",
+        )
 
     def get_image(self, obj):
         request = self.context.get("request")
         return request.build_absolute_uri(obj.image.url)
 
-    def get_images(self, obj):
+class ProductDetailSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+    images = ProductImageSerializer(many=True)
+
+    class Meta:
+        model = Product
+        fields = (
+            "id",
+            "name",
+            "slug",
+            "short_description",
+            "long_description",
+            "price",
+            "image",
+            "images",
+            "weight",
+        )
+
+    def get_image(self, obj):
         request = self.context.get("request")
-        return [
-            {"image": request.build_absolute_uri(img.image.url)}
-            for img in obj.images.all()
-        ]
+        return request.build_absolute_uri(obj.image.url)
