@@ -64,8 +64,10 @@ class Product(models.Model):
             img.save(buffer, format="JPEG", quality=75, optimize=True)
             buffer.seek(0)
 
+            filename = self.image.name.split("/")[-1]  # 🔥 ВАЖЛИВО
+
             self.image.save(
-                self.image.name,
+                filename,
                 ContentFile(buffer.read()),
                 save=False
             )
