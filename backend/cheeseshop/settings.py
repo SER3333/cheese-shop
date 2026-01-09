@@ -35,6 +35,10 @@ INSTALLED_APPS = [
 
     'bot',
 ]
+INSTALLED_APPS += ["sendfile"]
+
+SENDFILE_BACKEND = "sendfile.backends.simple"
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -142,5 +146,8 @@ STATIC_ROOT = BASE_DIR / "static"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+SENDFILE_ROOT = MEDIA_ROOT
+SENDFILE_URL = MEDIA_URL
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
