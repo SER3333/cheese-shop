@@ -21,7 +21,7 @@ class Product(models.Model):
     )
 
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    image = models.ImageField(upload_to="media/products/", blank=True, null=True)
+    image = models.ImageField(upload_to="products/", blank=True, null=True)
     available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default="cheese")
@@ -43,7 +43,7 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='media/products/gallery/')
+    image = models.ImageField(upload_to='products/gallery/')
     alt_text = models.CharField(max_length=255, blank=True)
 
     def __str__(self):

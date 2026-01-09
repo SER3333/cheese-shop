@@ -14,6 +14,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN mkdir -p /app/static
+RUN mkdir -p /app/media
 
 CMD sh -c "gunicorn cheeseshop.wsgi:application --bind 0.0.0.0:$PORT"
