@@ -18,5 +18,5 @@ application = get_wsgi_application()
 
 # Тільки ПІСЛЯ цього додаємо WhiteNoise для медіа-файлів
 # /app/media — це шлях, який ви вказали при створенні Volume в Railway
-application = WhiteNoise(application, root='/app/media')
+application = WhiteNoise(application, root='/app/media', autorefresh=True)
 application.add_files('/app/media', prefix='/media/')
