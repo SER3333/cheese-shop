@@ -23,10 +23,8 @@ urlpatterns = [
     path('robots.txt', robots_txt, name='robots_txt'),
 ]
 
-urlpatterns += static(
-    settings.MEDIA_URL,
-    document_root=settings.MEDIA_ROOT
-)
+if settings.MEDIA_ROOT:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 
