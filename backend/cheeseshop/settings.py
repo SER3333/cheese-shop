@@ -35,7 +35,7 @@ INSTALLED_APPS = [
 
     'bot',
 ]
-INSTALLED_APPS += ["sendfile"]
+
 
 SENDFILE_BACKEND = "sendfile.backends.simple"
 
