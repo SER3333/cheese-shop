@@ -145,7 +145,7 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "static"
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = os.getenv("MEDIA_ROOT", BASE_DIR / "media")
 
 SENDFILE_ROOT = MEDIA_ROOT
 SENDFILE_URL = MEDIA_URL
