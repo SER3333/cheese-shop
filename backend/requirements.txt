@@ -9,3 +9,4 @@ django-cors-headers
 python-telegram-bot
 gunicorn
 whitenoise
+django-sendfile2
