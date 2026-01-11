@@ -3,7 +3,7 @@ from products.models import Product
 
 class Order(models.Model):
     name = models.CharField(max_length=100)
-    surname = models.CharField(max_lehght=100)
+    surname = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
     address = models.TextField(blank=True)
     comment = models.TextField(blank=True, null=True)
