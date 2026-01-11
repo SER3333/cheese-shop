@@ -7,7 +7,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
   const { items, updateQuantity, removeFromCart, clearCart, total } = useCart();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
-  const [form, setForm] = useState({ name: "", phone: "", address: "", comment: "" });
+  const [form, setForm] = useState({ name: "", surname: "", phone: "", address: "", comment: "" });
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -17,6 +17,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
     setLoading(true);
     const payload = {
       name: form.name,
+      surname: form.surname,
       phone: form.phone,
       address: form.address,
       comment: form.comment,
@@ -96,6 +97,15 @@ const CartDrawer = ({ isOpen, onClose }) => {
               />
 
               <input
+                name="surname"
+                value={form.surname}
+                onChange={handleChange}
+                required
+                placeholder="Фамілія"
+                className="w-full p-2 border rounded"
+              />
+
+              <input
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
@@ -108,7 +118,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 name="address"
                 value={form.address}
                 onChange={handleChange}
-                placeholder="Адреса (або самовивіз)"
+                placeholder="Адреса (Нова пошта)"
                 className="w-full p-2 border rounded"
               />
 

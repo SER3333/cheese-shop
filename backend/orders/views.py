@@ -33,6 +33,7 @@ class OrderCreateView(generics.CreateAPIView):
         text = (
             f"📦 Нове замовлення #{order.id}\n"
             f"👤 Ім'я: {order.name}\n"
+            f"👤 Фамілія : {order.surname}\n"
             f"📞 Телефон: {order.phone}\n"
             f"📍 Адреса: {order.address or '-'}\n"
             f"📝 Коментар: {order.comment or '-'}\n"

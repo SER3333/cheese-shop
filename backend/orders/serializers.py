@@ -20,6 +20,7 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'name',
+            'surname',
             'phone',
             'address',
             'comment',
