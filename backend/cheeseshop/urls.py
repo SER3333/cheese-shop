@@ -6,14 +6,10 @@ from django.contrib.sitemaps.views import sitemap
 from products.sitemaps import ProductSitemap, StaticViewSitemap
 from .views import robots_txt
 
-
-
-
 sitemaps = {
     "products": ProductSitemap,
     "static": StaticViewSitemap,
 }
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),

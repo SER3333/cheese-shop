@@ -4,16 +4,19 @@ from .models import Product
 class ProductSitemap(Sitemap):
     changefreq = "weekly"
     priority = 0.8
+    protocol = "https"   # 🔥 ОБОВʼЯЗКОВО
 
     def items(self):
-        return Product.objects.all()
+        return Product.objects.filter(available=True)
 
     def location(self, obj):
-        return f"/product/{obj.slug}/"  # slug SEO-friendly
+        return f"/product/{obj.slug}/"
+
 
 class StaticViewSitemap(Sitemap):
     changefreq = "weekly"
     priority = 0.6
+    protocol = "https"   # 🔥 ОБОВʼЯЗКОВО
 
     def items(self):
         return ["home", "siry", "dzhemy", "soky"]
