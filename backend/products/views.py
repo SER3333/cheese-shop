@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import Product, ProductReview
-from .serializers import ProductSerializer, ProductReviewSerializer
+from .models import Product
+from .serializers import ProductSerializer
 
 class ProductListView(generics.ListAPIView):
     queryset = Product.objects.filter(available=True).order_by('-created_at')
@@ -17,8 +17,4 @@ class ProductDetailView(generics.RetrieveAPIView):
 
     def get_serializer_context(self):
         return {"request": self.request}
-
-class ProductReviewCreateView(generics.CreateAPIView):
-    queryset = ProductReview.objects.all()
-    serializer_class = ProductReviewSerializer
 
