@@ -44,40 +44,56 @@ class Product(models.Model):
                 slug = f"{base_slug}-{counter}"
                 counter += 1
             self.slug = slug
+
         super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name} — {self.weight} г"
 
-
 class ProductImage(models.Model):
-    product = models.ForeignKey(
-        Product,
-        related_name="images",
-        on_delete=models.CASCADE
-    )
-    image = models.ImageField(upload_to="products/gallery/")
+    product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='products/gallery/')
     alt_text = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return f"Image for {self.product.name}"
 
-
 class ProductReview(models.Model):
-    RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]
+    RATING_CHOICES = [
+        (1, "1"),
+        (2, "2"),
+        (3, "3"),
+        (4, "4"),
+        (5, "5"),
+    ]
 
     product = models.ForeignKey(
         Product,
         related_name="reviews",
         on_delete=models.CASCADE
     )
-    name = models.CharField(max_length=100)
-    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES)
-    comment = models.TextField()
+
+    name = models.CharField(
+        max_length=100,
+        verbose_name="Ім'я"
+    )
+
+    rating = models.PositiveSmallIntegerField(
+        choices=RATING_CHOICES,
+        verbose_name="Оцінка"
+    )
+
+    comment = models.TextField(
+        verbose_name="Відгук"
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
-    is_approved = models.BooleanField(default=True)
+
+    is_approved = models.BooleanField(
+        default=True,
+        verbose_name="Опубліковано"
+    )
 
     def __str__(self):
         return f"{self.product.name} — {self.rating}★"
-
 
