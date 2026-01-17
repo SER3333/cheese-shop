@@ -8,15 +8,20 @@ from .serializers import (
 
 
 class ProductListView(generics.ListAPIView):
-    queryset = Product.objects.filter(available=True).order_by("-created_at")
+    queryset = Product.objects.filter(available=True).order_by('-created_at')
     serializer_class = ProductListSerializer
+
+    def get_serializer_context(self):
+        return {"request": self.request}
 
 
 class ProductDetailView(generics.RetrieveAPIView):
     queryset = Product.objects.filter(available=True)
     serializer_class = ProductDetailSerializer
-    lookup_field = "slug"
+    lookup_field = "slug"  # <- ось це ключове
 
+    def get_serializer_context(self):
+        return {"request": self.request}
 
 class ProductReviewCreateView(generics.CreateAPIView):
     queryset = ProductReview.objects.all()
