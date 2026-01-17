@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.db.models import Avg
 
 class Product(models.Model):
     CATEGORY_CHOICES = [
@@ -26,6 +27,14 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default="cheese")
 
+    def average_rating(self):
+        return (
+            self.reviews
+            .filter(is_approved=True)
+            .aggregate(avg=Avg("rating"))["avg"]
+            or 0
+        )
+
     def save(self, *args, **kwargs):
         if not self.slug:
             base_slug = slugify(self.name)
@@ -49,4 +58,42 @@ class ProductImage(models.Model):
     def __str__(self):
         return f"Image for {self.product.name}"
 
+class ProductReview(models.Model):
+    RATING_CHOICES = [
+        (1, "1"),
+        (2, "2"),
+        (3, "3"),
+        (4, "4"),
+        (5, "5"),
+    ]
+
+    product = models.ForeignKey(
+        Product,
+        related_name="reviews",
+        on_delete=models.CASCADE
+    )
+
+    name = models.CharField(
+        max_length=100,
+        verbose_name="Ім'я"
+    )
+
+    rating = models.PositiveSmallIntegerField(
+        choices=RATING_CHOICES,
+        verbose_name="Оцінка"
+    )
+
+    comment = models.TextField(
+        verbose_name="Відгук"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    is_approved = models.BooleanField(
+        default=True,
+        verbose_name="Опубліковано"
+    )
+
+    def __str__(self):
+        return f"{self.product.name} — {self.rating}★"
 
