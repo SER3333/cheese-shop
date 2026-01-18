@@ -29,12 +29,8 @@ class Product(models.Model):
 
     @property
     def average_rating(self):
-        return (
-                self.reviews
-                .filter(is_approved=True)
-                .aggregate(avg=Avg("rating"))["avg"]
-                or 0
-        )
+        avg = self.reviews.filter(is_approved=True).aggregate(avg=Avg("rating"))["avg"]
+        return float(avg) if avg is not None else 0.0
 
     def save(self, *args, **kwargs):
         if not self.slug:

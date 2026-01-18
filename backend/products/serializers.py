@@ -22,7 +22,7 @@ class ProductSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
     reviews = ProductReviewSerializer(many=True, read_only=True)
-    average_rating = serializers.FloatField(read_only=True)
+    average_rating = serializers.ReadOnlyField()
 
     class Meta:
         model = Product
