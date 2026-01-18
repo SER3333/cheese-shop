@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.db.models import Avg
+from decimal import Decimal, InvalidOperation
 
 class Product(models.Model):
     CATEGORY_CHOICES = [
@@ -29,8 +30,17 @@ class Product(models.Model):
 
     @property
     def average_rating(self):
-        avg = self.reviews.filter(is_approved=True).aggregate(avg=Avg("rating"))["avg"]
-        return float(avg) if avg is not None else 0.0
+        avg = self.reviews.filter(
+            is_approved=True,
+            rating__isnull=False
+        ).aggregate(avg=Avg("rating"))["avg"]
+
+        try:
+            if avg is None:
+                return 0
+            return float(avg)
+        except (InvalidOperation, ValueError, TypeError):
+            return 0
 
     def save(self, *args, **kwargs):
         if not self.slug:
