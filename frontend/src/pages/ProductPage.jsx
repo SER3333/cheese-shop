@@ -114,7 +114,7 @@ const ProductPage = () => {
     if (!reviewName || !reviewText) return;
 
     setSending(true);
-    fetch(`${process.env.REACT_APP_API_URL}/api/reviews/create/`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/products/reviews/create/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
