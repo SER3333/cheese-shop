@@ -85,4 +85,5 @@ class ProductReview(models.Model):
     is_approved = models.BooleanField(default=True,verbose_name="Опубліковано")
 
     def __str__(self):
-        return f"{self.product.name} — {self.rating}★"
+        product_name = self.product.name if self.product_id else "Без продукту"
+        return f"{product_name} — {self.rating or 0}★"
