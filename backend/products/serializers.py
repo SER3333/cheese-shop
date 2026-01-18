@@ -7,6 +7,7 @@ class ProductReviewSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "product",
             "rating",
             "comment",
             "created_at"
