@@ -3,6 +3,23 @@ import { useParams, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { Helmet } from "react-helmet-async";
 
+const Stars = ({ value, onChange, readOnly = false }) => (
+  <div className="flex gap-1">
+    {[1, 2, 3, 4, 5].map((star) => (
+      <button
+        key={star}
+        disabled={readOnly}
+        onClick={() => onChange && onChange(star)}
+        className={`text-2xl ${
+          star <= value ? "text-yellow-500" : "text-gray-300"
+        }`}
+      >
+        ★
+      </button>
+    ))}
+  </div>
+);
+
 const ProductPage = () => {
   const { slug } = useParams();
   const { addToCart } = useCart();
@@ -10,10 +27,20 @@ const ProductPage = () => {
   const [product, setProduct] = useState(null);
   const [imgIndex, setImgIndex] = useState(0);
 
+  // reviews
+  const [rating, setRating] = useState(5);
+  const [reviewName, setReviewName] = useState("");
+  const [reviewText, setReviewText] = useState("");
+  const [sending, setSending] = useState(false);
+
+  // swipe
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
   const categoryMap = {
-      cheese: { name: "Сири", slug: "siry" },
-      jam: { name: "Джеми", slug: "dzhemy" },
-      juice: { name: "Соки", slug: "soky" },
+    cheese: { name: "Сири", slug: "siry" },
+    jam: { name: "Джеми", slug: "dzhemy" },
+    juice: { name: "Соки", slug: "soky" },
   };
 
   /* ======================
@@ -26,30 +53,13 @@ const ProductPage = () => {
       .catch(console.error);
   }, [slug]);
 
-  if (!product)
+  if (!product) {
     return <p className="text-center mt-20">Завантаження...</p>;
+  }
 
   /* ======================
-     SEO SCHEMA
+     GALLERY
   ====================== */
-  const productSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    image: product.image ? [product.image] : undefined,
-    description: product.short_description || product.long_description,
-    sku: product.id,
-    brand: { "@type": "Brand", name: "Крафтова лавка" },
-    offers: {
-      "@type": "Offer",
-      url: typeof window !== "undefined" ? window.location.href : "",
-      priceCurrency: "UAH",
-      price: product.price,
-      availability: "https://schema.org/InStock",
-      itemCondition: "https://schema.org/NewCondition",
-    },
-  };
-
   const images = [
     product.image,
     ...(product.images?.map((i) => i.image) || []),
@@ -58,137 +68,110 @@ const ProductPage = () => {
   const next = () => setImgIndex((p) => (p + 1) % images.length);
   const prev = () => setImgIndex((p) => (p - 1 + images.length) % images.length);
 
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current - touchEndX.current > 50) next();
+    if (touchEndX.current - touchStartX.current > 50) prev();
+  };
+
+  /* ======================
+     SEO
+  ====================== */
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    image: images,
+    description: product.short_description || product.long_description,
+    sku: product.id,
+    brand: { "@type": "Brand", name: "Крафтова лавка" },
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "UAH",
+      price: product.price,
+      availability: "https://schema.org/InStock",
+    },
+    aggregateRating: product.average_rating
+      ? {
+          "@type": "AggregateRating",
+          ratingValue: product.average_rating,
+          reviewCount: product.reviews?.length || 0,
+        }
+      : undefined,
+  };
+
+  /* ======================
+     SEND REVIEW
+  ====================== */
+  const sendReview = () => {
+    if (!reviewName || !reviewText) return;
+
+    setSending(true);
+    fetch(`${process.env.REACT_APP_API_URL}/api/reviews/create/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        product: product.id,
+        name: reviewName,
+        rating,
+        comment: reviewText,
+      }),
+    })
+      .then(() => window.location.reload())
+      .finally(() => setSending(false));
+  };
+
   return (
-    <div className="min-h-screen bg-yellow-50 px-4 py-6 md:px-6">
-      {/* SEO */}
+    <div className="min-h-screen bg-yellow-50 px-4 py-6">
       <Helmet>
-          <title>Купити {product.name} — натуральний крафтовий продукт</title>
-
-          <meta
-            name="description"
-            content={`Купити ${product.name}. Натуральний фермерський продукт без хімії та консервантів. Доставка по Україні.`}
-          />
-
-          {/* Product schema */}
-          <script type="application/ld+json">
-            {JSON.stringify(productSchema)}
-          </script>
-
-          {/* Breadcrumbs schema */}
-          <script type="application/ld+json">
-            {JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              "itemListElement": [
-                {
-                  "@type": "ListItem",
-                  "position": 1,
-                  "name": "Головна",
-                  "item": window.location.origin + "/"
-                },
-                product.category && categoryMap[product.category]
-                  ? {
-                      "@type": "ListItem",
-                      "position": 2,
-                      "name": categoryMap[product.category].name,
-                      "item":
-                        window.location.origin +
-                        "/" +
-                        categoryMap[product.category].slug
-                    }
-                  : null,
-                {
-                  "@type": "ListItem",
-                  "position": 3,
-                  "name": product.name,
-                  "item": window.location.href
-                }
-              ].filter(Boolean)
-            })}
-          </script>
+        <title>Купити {product.name} — Крафтова лавка</title>
+        <meta
+          name="description"
+          content={`Купити ${product.name}. Натуральний фермерський продукт. Доставка по Україні.`}
+        />
+        <script type="application/ld+json">
+          {JSON.stringify(productSchema)}
+        </script>
       </Helmet>
 
-
-
-      {/* BACK */}
       <Link
         to="/"
-        className="inline-block mb-6 text-sm bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+        className="inline-block mb-6 text-sm bg-gray-200 px-4 py-2 rounded-lg"
       >
         ← На головну
       </Link>
 
-      {/* PRODUCT */}
-      <section className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg p-4 sm:p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-
+      <section className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg p-6 grid md:grid-cols-2 gap-8">
         {/* GALLERY */}
-        <div className="relative">
-          <div className="relative w-full aspect-square bg-yellow-50 rounded-xl">
-            <img
-              src={images[imgIndex]}
-              alt={`Купити ${product.name}`}
-              className="absolute inset-0 w-full h-full object-contain rounded-xl"
-              loading="eager"
-            />
-
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={prev}
-                  className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2
-                  bg-yellow-500/80 hover:bg-yellow-600 text-white
-                  w-10 h-10 rounded-full shadow-lg
-                  items-center justify-center"
-                >
-                  ‹
-                </button>
-
-                <button
-                  onClick={next}
-                  className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2
-                  bg-yellow-500/80 hover:bg-yellow-600 text-white
-                  w-10 h-10 rounded-full shadow-lg
-                  items-center justify-center"
-                >
-                  ›
-                </button>
-              </>
-            )}
-          </div>
-
-          {/* THUMBNAILS (desktop) */}
-          {images.length > 1 && (
-            <div className="hidden sm:flex gap-3 mt-4 justify-center">
-              {images.map((img, i) => (
-                <button
-                  key={i}
-                  onClick={() => setImgIndex(i)}
-                  className={`w-16 h-16 rounded-lg border-2 ${
-                    i === imgIndex
-                      ? "border-yellow-600"
-                      : "border-transparent"
-                  }`}
-                >
-                  <img
-                    src={img}
-                    alt=""
-                    className="w-full h-full object-cover rounded-md"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
+        <div
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          className="relative aspect-square bg-yellow-50 rounded-xl"
+        >
+          <img
+            src={images[imgIndex]}
+            alt={product.name}
+            className="absolute inset-0 w-full h-full object-contain"
+          />
         </div>
 
         {/* INFO */}
         <div className="flex flex-col gap-4">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-yellow-900">
+          <h1 className="text-3xl font-bold text-yellow-900">
             {product.name}
           </h1>
 
-          <p className="text-gray-700 leading-relaxed">
-            {product.long_description}
-          </p>
+          <Stars value={Math.round(product.average_rating || 0)} readOnly />
+
+          <p className="text-gray-700">{product.long_description}</p>
 
           <div className="text-3xl font-bold text-yellow-800">
             {product.price} грн
@@ -196,17 +179,59 @@ const ProductPage = () => {
 
           <button
             onClick={() => addToCart(product)}
-            className="
-              mt-2
-              w-full sm:w-auto
-              bg-yellow-600 hover:bg-yellow-700
-              text-white font-semibold
-              px-8 py-3
-              rounded-xl
-              transition
-            "
+            className="bg-yellow-600 hover:bg-yellow-700 text-white px-8 py-3 rounded-xl"
           >
             Додати в кошик
+          </button>
+        </div>
+      </section>
+
+      {/* REVIEWS */}
+      <section className="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow">
+        <h2 className="text-xl font-bold mb-4">Відгуки</h2>
+
+        {product.reviews?.length ? (
+          <div className="space-y-4">
+            {product.reviews.map((r) => (
+              <div key={r.id} className="bg-gray-50 p-4 rounded-xl">
+                <div className="flex justify-between">
+                  <strong>{r.name}</strong>
+                  <Stars value={r.rating} readOnly />
+                </div>
+                <p className="mt-2 text-gray-700">{r.comment}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-500">Поки що немає відгуків</p>
+        )}
+
+        {/* ADD REVIEW */}
+        <div className="mt-8 border-t pt-6">
+          <h3 className="font-semibold mb-2">Залишити відгук</h3>
+
+          <Stars value={rating} onChange={setRating} />
+
+          <input
+            className="w-full mt-3 p-3 border rounded-lg"
+            placeholder="Ваше ім'я"
+            value={reviewName}
+            onChange={(e) => setReviewName(e.target.value)}
+          />
+
+          <textarea
+            className="w-full mt-3 p-3 border rounded-lg"
+            placeholder="Ваш відгук"
+            value={reviewText}
+            onChange={(e) => setReviewText(e.target.value)}
+          />
+
+          <button
+            disabled={sending}
+            onClick={sendReview}
+            className="mt-4 bg-yellow-600 text-white px-6 py-3 rounded-xl"
+          >
+            Надіслати
           </button>
         </div>
       </section>
@@ -215,5 +240,6 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
+
 
 

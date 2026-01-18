@@ -1,5 +1,17 @@
 from rest_framework import serializers
-from .models import Product, ProductImage
+from .models import Product, ProductImage, ProductReview
+
+class ProductReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductReview
+        fields = [
+            "id",
+            "name",
+            "rating",
+            "comment",
+            "created_at"
+        ]
+
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,6 +21,8 @@ class ProductImageSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
+    reviews = ProductReviewSerializer(many=True, read_only=True)
+    average_rating = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Product
@@ -36,62 +50,3 @@ class ProductSerializer(serializers.ModelSerializer):
             {"image": request.build_absolute_uri(img.image.url)}
             for img in obj.images.all()
         ]
-'''
-from rest_framework import serializers
-from .models import Product, ProductImage
-
-class ProductImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductImage
-        fields = ["image"]
-
-class ProductListSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Product
-        fields = (
-            "id",
-            "name",
-            "slug",
-            "price",
-            "weight",
-            "image",
-        )
-
-    def get_image(self, obj):
-        request = self.context.get("request")
-        if not obj.image:
-            return None
-        if request:
-            return request.build_absolute_uri(obj.image.url)
-        return obj.image.url
-
-
-class ProductDetailSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()
-    images = ProductImageSerializer(many=True)
-
-    class Meta:
-        model = Product
-        fields = (
-            "id",
-            "name",
-            "slug",
-            "short_description",
-            "long_description",
-            "price",
-            "image",
-            "images",
-            "weight",
-        )
-
-    def get_image(self, obj):
-        if not obj.image:
-            return None
-        request = self.context.get("request")
-        if request:
-            return request.build_absolute_uri(obj.image.url)
-        return obj.image.url
-
-'''
