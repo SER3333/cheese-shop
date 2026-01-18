@@ -38,6 +38,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'category',
             'images',
             'weight',
+            'average_rating',
+            'reviews'
         ]
 
     def get_image(self, obj):
