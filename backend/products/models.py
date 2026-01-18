@@ -27,6 +27,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default="cheese")
 
+    @property
     def average_rating(self):
         return (
                 self.reviews
