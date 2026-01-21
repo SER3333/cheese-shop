@@ -117,7 +117,7 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "api.torhova-lavka.com",
+    "https://api.torhova-lavka.com",
 ]
 #CORS_ALLOWED_ORIGINS = [
 #    "http://localhost:3000",
