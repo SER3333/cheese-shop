@@ -110,14 +110,14 @@ AUTH_PASSWORD_VALIDATORS = [
 CORS_ALLOW_ALL_ORIGINS = True
 
 ALLOWED_HOSTS = [
-    "cheese-shop-production.up.railway.app",
-    ".up.railway.app",
+    "api.torhova-lavka.com",
+    "torhova-lavka.com",
     "localhost",
     "127.0.0.1",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://cheese-shop-production.up.railway.app",
+    "api.torhova-lavka.com",
 ]
 #CORS_ALLOWED_ORIGINS = [
 #    "http://localhost:3000",
