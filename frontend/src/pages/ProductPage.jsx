@@ -3,6 +3,9 @@ import { useParams, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { Helmet } from "react-helmet-async";
 
+/* ======================
+   STARS COMPONENT
+====================== */
 const Stars = ({ value, onChange, readOnly = false }) => (
   <div className="flex gap-1">
     {[1, 2, 3, 4, 5].map((star) => (
@@ -37,12 +40,6 @@ const ProductPage = () => {
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
-  const categoryMap = {
-    cheese: { name: "Сири", slug: "siry" },
-    jam: { name: "Джеми", slug: "dzhemy" },
-    juice: { name: "Соки", slug: "soky" },
-  };
-
   /* ======================
      FETCH PRODUCT
   ====================== */
@@ -58,15 +55,24 @@ const ProductPage = () => {
   }
 
   /* ======================
-     GALLERY
+     IMAGES
   ====================== */
   const images = [
     product.image,
     ...(product.images?.map((i) => i.image) || []),
   ].filter(Boolean);
 
-  const next = () => setImgIndex((p) => (p + 1) % images.length);
-  const prev = () => setImgIndex((p) => (p - 1 + images.length) % images.length);
+  const hasManyImages = images.length > 1;
+
+  const next = () => {
+    if (!hasManyImages) return;
+    setImgIndex((p) => (p + 1) % images.length);
+  };
+
+  const prev = () => {
+    if (!hasManyImages) return;
+    setImgIndex((p) => (p - 1 + images.length) % images.length);
+  };
 
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
@@ -77,12 +83,14 @@ const ProductPage = () => {
   };
 
   const handleTouchEnd = () => {
+    if (!hasManyImages) return;
+
     if (touchStartX.current - touchEndX.current > 50) next();
     if (touchEndX.current - touchStartX.current > 50) prev();
   };
 
   /* ======================
-     SEO
+     SEO SCHEMA
   ====================== */
   const productSchema = {
     "@context": "https://schema.org",
@@ -148,22 +156,64 @@ const ProductPage = () => {
         ← На головну
       </Link>
 
+      {/* ======================
+           MAIN SECTION
+      ====================== */}
       <section className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg p-6 grid md:grid-cols-2 gap-8">
-        {/* GALLERY */}
+        {/* ======================
+             GALLERY
+        ====================== */}
         <div
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className="relative aspect-square bg-yellow-50 rounded-xl"
+          className="relative aspect-square bg-yellow-50 rounded-xl overflow-hidden"
         >
           <img
             src={images[imgIndex]}
             alt={product.name}
-            className="absolute inset-0 w-full h-full object-contain"
+            className="absolute inset-0 w-full h-full object-contain transition-all duration-300"
           />
+
+          {/* LEFT BUTTON (DESKTOP) */}
+          {hasManyImages && (
+            <button
+              onClick={prev}
+              className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-3xl px-3 py-2 rounded-full shadow"
+            >
+              ‹
+            </button>
+          )}
+
+          {/* RIGHT BUTTON (DESKTOP) */}
+          {hasManyImages && (
+            <button
+              onClick={next}
+              className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-3xl px-3 py-2 rounded-full shadow"
+            >
+              ›
+            </button>
+          )}
+
+          {/* DOTS INDICATOR */}
+          {hasManyImages && (
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+              {images.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setImgIndex(i)}
+                  className={`w-2.5 h-2.5 rounded-full ${
+                    i === imgIndex ? "bg-yellow-600" : "bg-gray-300"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* INFO */}
+        {/* ======================
+             INFO
+        ====================== */}
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-bold text-yellow-900">
             {product.name}
@@ -186,7 +236,9 @@ const ProductPage = () => {
         </div>
       </section>
 
-      {/* REVIEWS */}
+      {/* ======================
+           REVIEWS
+      ====================== */}
       <section className="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow">
         <h2 className="text-xl font-bold mb-4">Відгуки</h2>
 
@@ -240,6 +292,7 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
+
 
 
 
