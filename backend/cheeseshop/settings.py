@@ -110,14 +110,14 @@ AUTH_PASSWORD_VALIDATORS = [
 CORS_ALLOW_ALL_ORIGINS = True
 
 ALLOWED_HOSTS = [
-    "api.torhova-lavka.com",
-    "torhova-lavka.com",
+    "api.craftova-lavka.com",
+    "craftova-lavka.com",
     "localhost",
     "127.0.0.1",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://api.torhova-lavka.com",
+    "https://api.craftova-lavka.com",
 ]
 #CORS_ALLOWED_ORIGINS = [
 #    "http://localhost:3000",

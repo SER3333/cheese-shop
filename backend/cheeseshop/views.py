@@ -4,7 +4,7 @@ def robots_txt(request):
     lines = [
         "User-Agent: *",
         "Disallow:",
-        "Sitemap: https://api.torhova-lavka.com.app/sitemap.xml",
+        "Sitemap: https://api.craftova-lavka.com.app/sitemap.xml",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
