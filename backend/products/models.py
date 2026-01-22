@@ -11,7 +11,7 @@ class Product(models.Model):
     ]
 
     name = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=120, blank=True, null=True)
+    slug = models.SlugField(max_length=120, blank=True, null=True, unique=True)
     short_description = models.TextField(blank=True)
     long_description = models.TextField(blank=True)
 
@@ -44,12 +44,18 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            base_slug = slugify(self.name)
+            if self.short_description:
+                base_slug = slugify(self.short_description)
+            else:
+                base_slug = slugify(self.name)
+
             slug = base_slug
             counter = 1
+
             while Product.objects.filter(slug=slug).exclude(pk=self.pk).exists():
                 slug = f"{base_slug}-{counter}"
                 counter += 1
+
             self.slug = slug
 
         super().save(*args, **kwargs)
