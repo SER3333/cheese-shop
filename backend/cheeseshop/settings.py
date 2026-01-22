@@ -27,17 +27,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_cleanup.handlers',
 
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
+
     'corsheaders',
-
     'rest_framework',
-
     'products',
     'orders',
-
     'bot',
 ]
 
-
+SITE_ID = 1
 SENDFILE_BACKEND = "sendfile.backends.simple"
 
 

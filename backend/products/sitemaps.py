@@ -7,10 +7,10 @@ class ProductSitemap(Sitemap):
     protocol = "https"   # 🔥 ОБОВʼЯЗКОВО
 
     def items(self):
-        return Product.objects.filter(available=True)
+        return Product.objects.filter(available=True).order_by("id")  # 🔥
 
     def location(self, obj):
-        return f"/product/{obj.slug}/"
+        return f"/products/{obj.slug}/"   # 🔥 перевір шлях
 
 
 class StaticViewSitemap(Sitemap):
