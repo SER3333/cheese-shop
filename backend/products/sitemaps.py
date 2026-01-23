@@ -10,7 +10,7 @@ class ProductSitemap(Sitemap):
         return Product.objects.filter(available=True).order_by("id")  # 🔥
 
     def location(self, obj):
-        return f"/products/{obj.slug}/"   # 🔥 перевір шлях
+        return f"/product/{obj.slug}/"   # 🔥 перевір шлях
 
 
 class StaticViewSitemap(Sitemap):
