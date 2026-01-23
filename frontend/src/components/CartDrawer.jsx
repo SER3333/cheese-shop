@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
@@ -14,6 +14,17 @@ const CartDrawer = ({ isOpen, onClose }) => {
     address: "",
     comment: "",
   });
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
