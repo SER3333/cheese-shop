@@ -8,7 +8,7 @@ const CartIcon = ({ onOpen }) => {
   return (
     <button
       onClick={onOpen}
-      className="fixed right-4 bottom-6 z-50 bg-yellow-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-3"
+      className="fixed right-4 bottom-6 z-40 bg-yellow-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-3"
     >
       <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
       <span className="font-medium">{count}</span>

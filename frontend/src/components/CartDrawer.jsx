@@ -63,7 +63,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-60 transition-transform ${
+      className={`fixed inset-0 z-50 transition-transform ${
         isOpen ? "pointer-events-auto" : "pointer-events-none"
       }`}
     >
