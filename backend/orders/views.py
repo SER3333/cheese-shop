@@ -47,7 +47,7 @@ class OrderCreateView(generics.CreateAPIView):
             total_weight += item_weight
 
             text += (
-                f"• {item.product.name} — "
+                f"• {item.product.short_description} — "
                 f"{item.weight} г × {item.quantity} "
                 f"(разом {item_weight} г)\n"
             )

@@ -226,6 +226,11 @@ const ProductPage = () => {
           <div className="text-3xl font-bold text-yellow-800">
             {product.price} грн
           </div>
+          {product.weight && (
+            <div className="text-lg text-gray-700">
+              Вага: {product.weight} г
+            </div>
+          )}
 
           <button
             onClick={() => addToCart(product)}
