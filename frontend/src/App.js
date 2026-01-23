@@ -18,8 +18,9 @@ function App() {
   return (
     <CartProvider>
       <Header />
-      <CartIcon onOpen={() => setOpen(true)} />
+
       <CartDrawer isOpen={open} onClose={() => setOpen(false)} />
+      <CartIcon onOpen={() => setOpen(true)} />
 
       <Routes>
         <Route path="/" element={<HomePage />} />

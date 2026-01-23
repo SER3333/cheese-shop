@@ -37,22 +37,17 @@ class OrderSerializer(serializers.ModelSerializer):
 
         for item in items_data:
             product = Product.objects.get(id=item['product'])
-
-            weight = item.get('weight') or product.weight
             quantity = item.get('quantity', 1)
 
-            # 💰 ціна за позицію
-            item_price = (
-                Decimal(weight) / Decimal(100)
-            ) * product.price * quantity
-
+            # Ціна за позицію — просто ціна продукту × кількість
+            item_price = product.price * quantity
             total_price += item_price
 
             OrderItem.objects.create(
                 order=order,
                 product=product,
                 quantity=quantity,
-                weight = product.weight,  # ✅ БЕРЕМО З ТОВАРУ
+                weight=product.weight,  # вага для інформації, не для ціни
             )
 
         order.total_price = total_price
