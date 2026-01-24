@@ -14,6 +14,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
     address: "",
     comment: "",
   });
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -125,22 +126,51 @@ const CartDrawer = ({ isOpen, onClose }) => {
                     {parseFloat(it.product.price).toFixed(2)} грн
                   </div>
 
+                  {/* КІЛЬКІСТЬ З КНОПКАМИ + / − */}
                   <div className="flex items-center gap-2 mt-2">
+                    {/* Мінус */}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        updateQuantity(
+                          it.product.id,
+                          Math.max(1, it.quantity - 1)
+                        )
+                      }
+                      className="w-10 h-10 sm:w-8 sm:h-8 border rounded flex items-center justify-center text-lg select-none"
+                    >
+                      −
+                    </button>
+
+                    {/* Поле кількості */}
                     <input
                       type="number"
                       min="1"
                       value={it.quantity}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value || 1);
                         updateQuantity(
                           it.product.id,
-                          Math.max(1, parseInt(e.target.value || 1))
-                        )
-                      }
-                      className="w-16 p-1 border rounded"
+                          val < 1 ? 1 : val
+                        );
+                      }}
+                      className="w-16 p-1 border rounded text-center"
                     />
 
+                    {/* Плюс */}
                     <button
-                      className="text-sm text-red-500"
+                      type="button"
+                      onClick={() =>
+                        updateQuantity(it.product.id, it.quantity + 1)
+                      }
+                      className="w-10 h-10 sm:w-8 sm:h-8 border rounded flex items-center justify-center text-lg select-none"
+                    >
+                      +
+                    </button>
+
+                    {/* Видалити */}
+                    <button
+                      className="ml-2 text-sm text-red-500"
                       onClick={() => removeFromCart(it.product.id)}
                     >
                       Видалити
@@ -240,4 +270,5 @@ const CartDrawer = ({ isOpen, onClose }) => {
 };
 
 export default CartDrawer;
+
 
