@@ -128,53 +128,50 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
                   {/* КІЛЬКІСТЬ З КНОПКАМИ + / − */}
                   <div className="flex items-center gap-2 mt-2">
-                    {/* Мінус */}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        updateQuantity(
-                          it.product.id,
-                          Math.max(1, it.quantity - 1)
-                        )
-                      }
-                      className="w-10 h-10 sm:w-8 sm:h-8 border rounded flex items-center justify-center text-lg select-none"
-                    >
-                      −
-                    </button>
+                      {/* Мінус */}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          updateQuantity(
+                            it.product.id,
+                            Math.max(1, it.quantity - 1)
+                          )
+                        }
+                        className="w-10 h-10 border rounded flex items-center justify-center text-xl font-bold"
+                      >
+                        −
+                      </button>
 
-                    {/* Поле кількості */}
-                    <input
-                      type="number"
-                      min="1"
-                      value={it.quantity}
-                      onChange={(e) => {
-                        const val = parseInt(e.target.value || 1);
-                        updateQuantity(
-                          it.product.id,
-                          val < 1 ? 1 : val
-                        );
-                      }}
-                      className="w-16 p-1 border rounded text-center"
-                    />
+                      {/* Поле кількості — робимо text, не number */}
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        value={it.quantity}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value.replace(/\D/g, "")) || 1;
+                          updateQuantity(it.product.id, val < 1 ? 1 : val);
+                        }}
+                        className="w-14 h-10 border rounded text-center text-lg"
+                      />
 
-                    {/* Плюс */}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        updateQuantity(it.product.id, it.quantity + 1)
-                      }
-                      className="w-10 h-10 sm:w-8 sm:h-8 border rounded flex items-center justify-center text-lg select-none"
-                    >
-                      +
-                    </button>
+                      {/* Плюс */}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          updateQuantity(it.product.id, it.quantity + 1)
+                        }
+                        className="w-10 h-10 border rounded flex items-center justify-center text-xl font-bold"
+                      >
+                        +
+                      </button>
 
-                    {/* Видалити */}
-                    <button
-                      className="ml-2 text-sm text-red-500"
-                      onClick={() => removeFromCart(it.product.id)}
-                    >
-                      Видалити
-                    </button>
+                      {/* Видалити */}
+                      <button
+                        className="ml-2 text-sm text-red-500"
+                        onClick={() => removeFromCart(it.product.id)}
+                      >
+                        Видалити
+                      </button>
                   </div>
                 </div>
               </div>
