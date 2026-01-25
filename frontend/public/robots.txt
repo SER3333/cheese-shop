@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://api.craftova-lavka.com/sitemap.xml
+Sitemap: https://craftova-lavka.com/sitemap.xml
