@@ -139,11 +139,15 @@ const ProductPage = () => {
   return (
     <div className="min-h-screen bg-yellow-50 px-4 py-6">
       <Helmet>
-        <title>Купити {product.name} — Крафтова лавка</title>
+        <title>
+          Купити сир {product.name} — {product.category === "cheese" ? "Крафтовий сир" : "Крафтова лавка"}
+        </title>
+
         <meta
           name="description"
-          content={`Купити сир ${product.name}. Натуральний фермерський продукт. Доставка по Україні.`}
+          content={`Купити сир ${product.name} — крафтовий фермерський сир. Доставка по Україні.`}
         />
+
         <script type="application/ld+json">
           {JSON.stringify(productSchema)}
         </script>
@@ -216,7 +220,7 @@ const ProductPage = () => {
         ====================== */}
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-bold text-yellow-900">
-            {product.name}
+            Сир {product.name}
           </h1>
 
           <Stars value={Math.round(product.average_rating || 0)} readOnly />
