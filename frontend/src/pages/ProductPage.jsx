@@ -142,7 +142,7 @@ const ProductPage = () => {
         <title>Купити {product.name} — Крафтова лавка</title>
         <meta
           name="description"
-          content={`Купити ${product.name}. Натуральний фермерський продукт. Доставка по Україні.`}
+          content={`Купити сир ${product.name}. Натуральний фермерський продукт. Доставка по Україні.`}
         />
         <script type="application/ld+json">
           {JSON.stringify(productSchema)}
