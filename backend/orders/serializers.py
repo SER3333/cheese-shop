@@ -39,7 +39,6 @@ class OrderSerializer(serializers.ModelSerializer):
             product = Product.objects.get(id=item['product'])
             quantity = item.get('quantity', 1)
 
-            # Ціна за позицію — просто ціна продукту × кількість
             item_price = product.price * quantity
             total_price += item_price
 
@@ -47,10 +46,11 @@ class OrderSerializer(serializers.ModelSerializer):
                 order=order,
                 product=product,
                 quantity=quantity,
-                weight=product.weight,  # вага для інформації, не для ціни
+                size_snapshot=product.size,  # 🔥 ключовий момент
             )
 
         order.total_price = total_price
         order.save(update_fields=['total_price'])
 
         return order
+

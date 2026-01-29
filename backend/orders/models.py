@@ -23,10 +23,11 @@ class OrderItem(models.Model):
 
     quantity = models.PositiveIntegerField(default=1)
 
-    weight = models.PositiveIntegerField(
-        verbose_name="Вага (г)",
-        help_text="Скільки грамів цього продукту замовили",
+    size_snapshot = models.CharField(
+        max_length=20,
+        verbose_name="Вага / обʼєм",
+        help_text="Наприклад: 300 г або 160 мл"
     )
 
     def __str__(self):
-        return f"{self.product.name} — {self.weight} г × {self.quantity}"
+        return f"{self.product.name} — {self.size_snapshot} × {self.quantity}"

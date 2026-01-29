@@ -33,26 +33,19 @@ class OrderCreateView(generics.CreateAPIView):
         text = (
             f"📦 Нове замовлення #{order.id}\n"
             f"👤 Ім'я: {order.name}\n"
-            f"👤 Фамілія : {order.surname}\n"
+            f"👤 Фамілія: {order.surname}\n"
             f"📞 Телефон: {order.phone}\n"
             f"📍 Адреса: {order.address or '-'}\n"
             f"📝 Коментар: {order.comment or '-'}\n"
             f"🧀 Товари:\n"
         )
 
-        total_weight = 0
-
         for item in order.orderitem_set.all():
-            item_weight = item.weight * item.quantity
-            total_weight += item_weight
-
             text += (
                 f"• {item.product.short_description} — "
-                f"{item.weight} г × {item.quantity} "
-                f"(разом {item_weight} г)\n"
+                f"{item.size_snapshot} × {item.quantity}\n"
             )
 
-        text += f"\n⚖️ Загальна вага: {total_weight} г"
         text += f"\n💰 Сума: {order.total_price} грн"
 
         requests.get(
