@@ -299,7 +299,7 @@ const ProductPage = () => {
           </div>
           {product.size && (
             <div className="text-lg text-gray-700">
-              Вага: {product.size} г
+                {product.size}
             </div>
           )}
 

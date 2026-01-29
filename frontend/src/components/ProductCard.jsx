@@ -105,7 +105,7 @@ const ProductCard = ({ product }) => {
       {/* META */}
       <div className="mt-3 flex items-center justify-between">
         <span className="text-yellow-800 font-semibold text-sm">
-          {product.size} г
+          {product.size}
         </span>
         <span className="text-yellow-800 font-bold text-xl md:text-2xl">
           {product.price} грн
