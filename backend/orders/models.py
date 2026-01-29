@@ -26,7 +26,9 @@ class OrderItem(models.Model):
     size_snapshot = models.CharField(
         max_length=20,
         verbose_name="Вага / обʼєм",
-        help_text="Наприклад: 300 г або 160 мл"
+        help_text="Наприклад: 300 г або 160 мл",
+        blank = True,
+        null = True
     )
 
     def __str__(self):
