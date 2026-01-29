@@ -22,6 +22,14 @@ class Product(models.Model):
         blank=True
     )
 
+    size = models.CharField(
+        max_length=20,
+        verbose_name="Вага / обʼєм",
+        help_text="Наприклад: 300 г або 160 мл",
+        blank=True,
+        null=True
+    )
+
     price = models.DecimalField(max_digits=8, decimal_places=2)
     image = models.ImageField(upload_to="products/", blank=True, null=True)
     available = models.BooleanField(default=True)

@@ -39,6 +39,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'category',
             'images',
             'weight',
+            'size',
             'average_rating',
             'reviews'
         ]
