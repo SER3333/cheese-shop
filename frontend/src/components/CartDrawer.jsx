@@ -220,7 +220,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 value={form.surname}
                 onChange={handleChange}
                 required
-                placeholder="Фамілія"
+                placeholder="Прізвище"
                 className="w-full p-2 border rounded"
               />
 
