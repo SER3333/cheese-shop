@@ -133,25 +133,27 @@ const HomePage = () => {
       </section>
 
       {/* CATEGORY FILTER */}
-      <div className="flex gap-3 px-4 my-6 overflow-x-auto justify-start md:justify-center">
-        {[
-          { label: "Все", path: "/" },
-          { label: "Сири", path: "/siry" },
-          { label: "Джеми", path: "/dzhemy" },
-          // { label: "Соки", path: "/soky" }, ❌ тимчасово прибрано
-        ].map(({ label, path }) => (
-          <button
-            key={path}
-            onClick={() => navigate(path)}
-            className={`whitespace-nowrap px-4 py-2 rounded-lg transition ${
-              (!category && path === "/") || path === `/${category}`
-                ? "bg-yellow-600 text-white"
-                : "bg-yellow-200 hover:bg-yellow-300"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
+      <div className="my-6 px-4 flex justify-center">
+        <div className="flex gap-3 overflow-x-auto max-w-full">
+          {[
+            { label: "Все", path: "/" },
+            { label: "Сири", path: "/siry" },
+            { label: "Джеми", path: "/dzhemy" },
+            // { label: "Соки", path: "/soky" }, ❌ тимчасово
+          ].map(({ label, path }) => (
+            <button
+              key={path}
+              onClick={() => navigate(path)}
+              className={`whitespace-nowrap px-4 py-2 rounded-lg transition ${
+                (!category && path === "/") || path === `/${category}`
+                  ? "bg-yellow-600 text-white"
+                  : "bg-yellow-200 hover:bg-yellow-300"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* PRODUCTS */}
