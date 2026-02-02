@@ -133,7 +133,7 @@ const HomePage = () => {
       </section>
 
       {/* CATEGORY FILTER */}
-      <div className="flex gap-3 px-4 my-6 overflow-x-auto md:justify-center">
+      <div className="flex gap-3 px-4 my-6 overflow-x-auto justify-start md:justify-center">
         {[
           { label: "Все", path: "/" },
           { label: "Сири", path: "/siry" },
