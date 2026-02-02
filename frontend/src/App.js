@@ -1,7 +1,6 @@
 // App.jsx
 import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
@@ -10,13 +9,15 @@ import CartIcon from "./components/CartIcon";
 import CartDrawer from "./components/CartDrawer";
 import { CartProvider } from "./context/CartContext";
 import AboutPage from "./pages/AboutPage";
-
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   const [open, setOpen] = useState(false);
 
   return (
     <CartProvider>
+      <ScrollToTop /> {/* ✅ ОСЬ ТУТ */}
+
       <Header />
 
       <CartDrawer isOpen={open} onClose={() => setOpen(false)} />
@@ -24,8 +25,8 @@ function App() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/:category" element={<HomePage />} /> {/* SEO categories */}
-        <Route path="/product/:slug" element={<ProductPage />} /> {/* SEO-friendly slug */}
+        <Route path="/:category" element={<HomePage />} />
+        <Route path="/product/:slug" element={<ProductPage />} />
         <Route path="/pro-nas" element={<AboutPage />} />
       </Routes>
 
@@ -35,5 +36,4 @@ function App() {
 }
 
 export default App;
-
 

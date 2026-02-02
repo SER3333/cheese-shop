@@ -19,11 +19,13 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ❌ Соки тимчасово прибрані
   <url>
     <loc>https://craftova-lavka.com/soky/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  -->
 
   <!-- Товари -->
 
