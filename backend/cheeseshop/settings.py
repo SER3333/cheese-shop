@@ -15,7 +15,6 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost").split()
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
 
-APPEND_SLASH = True
 
 SECURE_SSL_REDIRECT = True
 # Application definition
