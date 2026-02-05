@@ -104,7 +104,7 @@ const HomePage = () => {
     : products;
 
   const canonicalUrl = `https://craftova-lavka.com${
-    category ? `/${category}` : ""
+    category ? `/${category}` : "/"
   }`;
 
   return (
