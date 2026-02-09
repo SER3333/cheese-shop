@@ -47,7 +47,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className="hover:text-yellow-900"
               >
-                📲 Telegram: +380 50 954 03 25
+                📲 Telegram:
               </a>
             </li>
             <li>
