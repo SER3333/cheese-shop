@@ -27,7 +27,7 @@
   </url>
   -->
 
-  <!-- Товари -->
+  <!-- Товари
 
   <url>
     <loc>https://craftova-lavka.com/product/belper-z-paprikoyu/</loc>
@@ -64,5 +64,5 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-
+-->
 </urlset>
