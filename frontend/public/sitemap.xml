@@ -65,4 +65,15 @@
     <priority>0.8</priority>
   </url>
 -->
+  <url>
+    <loc>https://craftova-lavka.com/product/dzhem-z-apelsina/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://craftova-lavka.com/product/dzhem-z-limona/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
