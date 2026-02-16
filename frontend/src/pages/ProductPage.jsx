@@ -55,6 +55,25 @@ const ProductPage = () => {
   }
 
   /* ======================
+     CATEGORY META (SEO)
+  ====================== */
+  const categoryMeta = {
+    cheese: {
+      title: "Крафтовий сир",
+      noun: "сир",
+      description: "крафтовий сир",
+    },
+    jam: {
+      title: "Натуральний джем",
+      noun: "джем",
+      description: "натуральний джем",
+    },
+
+  };
+
+  const meta = categoryMeta[product.category] || categoryMeta.default;
+
+  /* ======================
      IMAGES
   ====================== */
   const images = [
@@ -92,95 +111,86 @@ const ProductPage = () => {
   /* ======================
      SEO SCHEMA
   ====================== */
-    const productSchema = {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      name: product.name,
-      image: images,
-      description: product.short_description || product.long_description,
-      sku: String(product.id),
-      brand: {
-        "@type": "Brand",
-        name: "Крафтова лавка",
-      },
-
-      offers: {
-        "@type": "Offer",
-        url: window.location.href,
-        priceCurrency: "UAH",
-        price: product.price,
-        availability: "https://schema.org/InStock",
-        itemCondition: "https://schema.org/NewCondition",
-        priceValidUntil: "2026-12-31",
-
-        // 🔹 SHIPPING DETAILS
-        shippingDetails: {
-          "@type": "OfferShippingDetails",
-          shippingRate: {
-            "@type": "MonetaryAmount",
-            value: "0",
-            currency: "UAH",
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    image: images,
+    description: product.short_description || product.long_description,
+    sku: String(product.id),
+    brand: {
+      "@type": "Brand",
+      name: "Крафтова лавка",
+    },
+    offers: {
+      "@type": "Offer",
+      url: window.location.href,
+      priceCurrency: "UAH",
+      price: product.price,
+      availability: "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
+      priceValidUntil: "2026-12-31",
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          value: "0",
+          currency: "UAH",
+        },
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: "UA",
+        },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          handlingTime: {
+            "@type": "QuantitativeValue",
+            minValue: 1,
+            maxValue: 2,
+            unitCode: "d",
           },
-          shippingDestination: {
-            "@type": "DefinedRegion",
-            addressCountry: "UA",
-          },
-          deliveryTime: {
-            "@type": "ShippingDeliveryTime",
-            handlingTime: {
-              "@type": "QuantitativeValue",
-              minValue: 1,
-              maxValue: 2,
-              unitCode: "d",
-            },
-            transitTime: {
-              "@type": "QuantitativeValue",
-              minValue: 1,
-              maxValue: 3,
-              unitCode: "d",
-            },
+          transitTime: {
+            "@type": "QuantitativeValue",
+            minValue: 1,
+            maxValue: 3,
+            unitCode: "d",
           },
         },
-
-        // 🔹 RETURN POLICY
-        hasMerchantReturnPolicy: {
-          "@type": "MerchantReturnPolicy",
-          applicableCountry: "UA",
-          returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
-          merchantReturnDays: 14,
-          returnMethod: "https://schema.org/ReturnByMail",
-          returnFees: "https://schema.org/FreeReturn",
-        },
       },
-
-
-      // 🔹 AGGREGATE RATING — завжди, навіть якщо 0
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: product.average_rating || 5,
-        reviewCount: product.reviews?.length || 1,
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "UA",
+        returnPolicyCategory:
+          "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 14,
+        returnMethod: "https://schema.org/ReturnByMail",
+        returnFees: "https://schema.org/FreeReturn",
       },
-
-      // 🔹 REVIEW — хоча б один, якщо є відгуки
-      ...(product.reviews?.length
-        ? {
-            review: product.reviews.map((r) => ({
-              "@type": "Review",
-              author: {
-                "@type": "Person",
-                name: r.name,
-              },
-              reviewRating: {
-                "@type": "Rating",
-                ratingValue: r.rating,
-                bestRating: "5",
-                worstRating: "1",
-              },
-              reviewBody: r.comment,
-            })),
-          }
-        : {}),
-    };
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: product.average_rating || 5,
+      reviewCount: product.reviews?.length || 1,
+    },
+    ...(product.reviews?.length
+      ? {
+          review: product.reviews.map((r) => ({
+            "@type": "Review",
+            author: {
+              "@type": "Person",
+              name: r.name,
+            },
+            reviewRating: {
+              "@type": "Rating",
+              ratingValue: r.rating,
+              bestRating: "5",
+              worstRating: "1",
+            },
+            reviewBody: r.comment,
+          })),
+        }
+      : {}),
+  };
 
   /* ======================
      SEND REVIEW
@@ -207,12 +217,12 @@ const ProductPage = () => {
     <div className="min-h-screen bg-yellow-50 px-4 py-6">
       <Helmet>
         <title>
-          Купити сир {product.name} — {product.category === "cheese" ? "Крафтовий сир" : "Крафтова лавка"}
+          Купити {meta.noun} {product.name} — {meta.title} | Крафтова лавка
         </title>
 
         <meta
           name="description"
-          content={`Купити сир ${product.name} — крафтовий фермерський сир. Доставка по Україні.`}
+          content={`Купити ${meta.noun} ${product.name} — ${meta.description}. Доставка по Україні.`}
         />
 
         <script type="application/ld+json">
@@ -227,13 +237,9 @@ const ProductPage = () => {
         ← На головну
       </Link>
 
-      {/* ======================
-           MAIN SECTION
-      ====================== */}
+      {/* MAIN SECTION */}
       <section className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg p-6 grid md:grid-cols-2 gap-8">
-        {/* ======================
-             GALLERY
-        ====================== */}
+        {/* GALLERY */}
         <div
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
@@ -246,7 +252,6 @@ const ProductPage = () => {
             className="absolute inset-0 w-full h-full object-contain transition-all duration-300"
           />
 
-          {/* LEFT BUTTON (DESKTOP) */}
           {hasManyImages && (
             <button
               onClick={prev}
@@ -256,7 +261,6 @@ const ProductPage = () => {
             </button>
           )}
 
-          {/* RIGHT BUTTON (DESKTOP) */}
           {hasManyImages && (
             <button
               onClick={next}
@@ -266,7 +270,6 @@ const ProductPage = () => {
             </button>
           )}
 
-          {/* DOTS INDICATOR */}
           {hasManyImages && (
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
               {images.map((_, i) => (
@@ -282,9 +285,7 @@ const ProductPage = () => {
           )}
         </div>
 
-        {/* ======================
-             INFO
-        ====================== */}
+        {/* INFO */}
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-bold text-yellow-900">
             {product.name}
@@ -297,10 +298,9 @@ const ProductPage = () => {
           <div className="text-3xl font-bold text-yellow-800">
             {product.price} грн
           </div>
+
           {product.size && (
-            <div className="text-lg text-gray-700">
-                {product.size}
-            </div>
+            <div className="text-lg text-gray-700">{product.size}</div>
           )}
 
           <button
@@ -312,9 +312,7 @@ const ProductPage = () => {
         </div>
       </section>
 
-      {/* ======================
-           REVIEWS
-      ====================== */}
+      {/* REVIEWS */}
       <section className="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow">
         <h2 className="text-xl font-bold mb-4">Відгуки</h2>
 
