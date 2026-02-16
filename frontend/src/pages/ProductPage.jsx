@@ -287,7 +287,7 @@ const ProductPage = () => {
         ====================== */}
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-bold text-yellow-900">
-            Сир {product.name}
+            {product.name}
           </h1>
 
           <Stars value={Math.round(product.average_rating || 0)} readOnly />
