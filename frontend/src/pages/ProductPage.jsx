@@ -68,10 +68,41 @@ const ProductPage = () => {
       noun: "джем",
       description: "натуральний джем",
     },
-
+    /*
+    juice: {
+      title: "Натуральний сік",
+      noun: "сік",
+      description: "натуральний фермерський сік",
+    },
+    default: {
+      title: "Крафтовий продукт",
+      noun: "товар",
+      description: "крафтовий фермерський продукт",
+    },
+    */
   };
 
   const meta = categoryMeta[product.category] || categoryMeta.default;
+
+  /* ======================
+     DYNAMIC PRODUCT TYPE (SEO)
+     (джем з апельсина, сир з козячого молока тощо)
+  ====================== */
+  const getProductType = () => {
+    if (product.short_description) {
+      return product.short_description.toLowerCase();
+    }
+
+    const fallback = {
+      cheese: "сир",
+      jam: "джем",
+      juice: "сік",
+    };
+
+    return fallback[product.category] || "товар";
+  };
+
+  const productType = getProductType();
 
   /* ======================
      IMAGES
@@ -217,12 +248,12 @@ const ProductPage = () => {
     <div className="min-h-screen bg-yellow-50 px-4 py-6">
       <Helmet>
         <title>
-          Купити {meta.noun} {product.name} — {meta.title} | Крафтова лавка
+          Купити {productType} {product.name} — {meta.title} | Крафтова лавка
         </title>
 
         <meta
           name="description"
-          content={`Купити ${meta.noun} ${product.name} — ${meta.description}. Доставка по Україні.`}
+          content={`Купити ${productType} ${product.name} — ${meta.description}. Доставка по Україні.`}
         />
 
         <script type="application/ld+json">
