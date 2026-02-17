@@ -248,12 +248,12 @@ const ProductPage = () => {
     <div className="min-h-screen bg-yellow-50 px-4 py-6">
       <Helmet>
         <title>
-          Купити {productType} {product.name} — {meta.title} | Крафтова лавка
+          Купити {productType} — {meta.title} | Крафтова лавка
         </title>
 
         <meta
           name="description"
-          content={`Купити ${productType} ${product.name} — ${meta.description}. Доставка по Україні.`}
+          content={`Купити ${productType} — ${meta.description}. Доставка по Україні.`}
         />
 
         <script type="application/ld+json">
